@@ -1,0 +1,26 @@
+version: "3.9"
+
+name: "rate-limiter"
+
+services:
+  rails-app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+      - ../..:/workspaces:cached
+
+    command: sleep infinity
+
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7.2
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:
