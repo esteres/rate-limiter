@@ -10,8 +10,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      post "authenticate", to: "authentication#create"
       post "signup", to: "users#create"
+      post "authenticate", to: "authentication#create"
+
+      get "rate_limit_test", to: "rate_limit_test#test"
     end
   end
 end

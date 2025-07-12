@@ -10,6 +10,8 @@ class ApplicationController < ActionController::API
   rescue_from AuthenticationError, with: :handle_unauthenticated
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
+  attr_reader :current_user_id
+
   private
 
   def authenticate_user!
@@ -34,5 +36,13 @@ class ApplicationController < ActionController::API
 
   def not_found(error)
     render json: { error: "User not found" }, status: :not_found
+  end
+
+  def enforce_rate_limit
+    limiter = SlidingWindowRateLimiter.new(redis: $redis, time_window: 30, max_requests: 3)
+
+    unless limiter.allow_request?(Time.now.to_i, current_user_id)
+      render json: { error: "Rate limit exceeded" }, status: :too_many_requests
+    end
   end
 end

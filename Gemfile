@@ -36,6 +36,7 @@ gem "thruster", require: false
 # gem "rack-cors"
 
 gem "jwt"
+gem "redis"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
